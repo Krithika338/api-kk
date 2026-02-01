@@ -10,7 +10,12 @@
       return res.status(500).json({ error: "API key missing" });
     }
 
-    const { audio } = req.body;
+   const body = req.body || {};
+   
+   const audio =
+  req.body.audio ||
+  req.body.audio_base64 ||
+  req.body.audioBase64;
 
     if (!audio) {
       return res.status(400).json({ error: "Audio not provided" });

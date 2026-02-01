@@ -13,7 +13,16 @@ export default async function handler(req, res) {
 
   try {
     // Authentication
-    const clientKey = req.headers["x-api-key"];
+    const clientKey =
+  req.headers["x-api-key"] ||
+  req.headers["api-key"] ||
+  req.headers["apikey"] ||
+  req.headers["authorization"]?.replace("Bearer ", "") ||
+  req.query?.api_key;
+
+if (clientKey !== process.env.API_KEY) {
+  return res.status(401).json({ error: "Invalid API key" });
+}
     if (clientKey !== process.env.API_KEY) {
       return res.status(401).json({ error: "Invalid API key" });
     }
